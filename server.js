@@ -27,6 +27,8 @@ app.use('/api/libros', require('./routes/bookRoutes'));
 app.use('/api/prestamos', require('./routes/loanRoutes'));
 app.use('/api/repositorio', require('./routes/repositoryRoutes'));
 app.use('/api/galeria', require('./routes/galleryRoutes'));
+app.use('/api/proxy', proxyRoutes);
+
 
 // Ruta base
 app.get('/', (req, res) => {
