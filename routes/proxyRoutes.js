@@ -6,14 +6,14 @@ router.get('/pdf/:publicId', async (req, res) => {
   const { publicId } = req.params;
 
   try {
-    const cloudinaryUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/${publicId}.pdf`;
+    const cloudinaryUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/${publicId}`;
 
     const response = await axios.get(cloudinaryUrl, {
       responseType: 'stream',
     });
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline'); // o 'attachment' si quieres forzar descarga
+    res.setHeader('Content-Disposition', 'inline'); // O 'attachment' para descargar
 
     response.data.pipe(res);
   } catch (error) {

@@ -14,9 +14,9 @@ const uploadPDF = async (req, res) => {
     // Limpieza del nombre del archivo
     const cleanName = file.originalname
       .replace(/\s+/g, '_')                     // Reemplaza espacios por "_"
-      .replace(/[^a-zA-Z0-9_.-]/g, '');          // Elimina caracteres no válidos
+      .replace(/[^a-zA-Z0-9_.-]/g, '');         // Elimina caracteres no válidos
 
-    const publicId = `${Date.now()}_${cleanName}`; // Nombre único + extensión .pdf incluida
+    const publicId = `${Date.now()}_${cleanName}`; // Nombre único
 
     // Subida a Cloudinary como archivo RAW
     const result = await cloudinary.uploader.upload(file.path, {
@@ -29,7 +29,8 @@ const uploadPDF = async (req, res) => {
     const newPDF = new Repository({
       title,
       author,
-      pdfUrl: result.secure_url
+      pdfUrl: result.secure_url,
+      publicId: result.public_id
     });
 
     await newPDF.save();
@@ -46,11 +47,14 @@ const uploadPDF = async (req, res) => {
 
 const getAllPDFs = async (req, res) => {
   try {
-    const files = await Repository.find().sort({ uploadedAt: -1 });
+    const files = await Repository.find().sort({ createdAt: -1 });
     res.json(files);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener los archivos' });
   }
 };
 
-module.exports = { uploadPDF, getAllPDFs };
+module.exports = {
+  uploadPDF,
+  getAllPDFs
+};
